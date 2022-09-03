@@ -1,0 +1,3 @@
+# Scribe 
+
+Golang Library for logging, currently work in progress...
