@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 const FgRed = "\x1b[31m"
@@ -16,6 +17,7 @@ const FgGrey = "\x1b[37m"
 
 var logLevel = os.Getenv("LOG_LEVEL")
 var disableTimestamp = os.Getenv("DISABLE_LOG_TIMESTAMPS")
+var profiling = os.Getenv("PROFILING")
 
 type Logger struct {
 	LogLevel int8
@@ -24,6 +26,13 @@ type Logger struct {
 	info     chan string
 	error    chan string
 	warn     chan string
+}
+
+func (l *Logger) Duration(invocation time.Time, name string) {
+	if profiling == "true" {
+		elapsed := time.Since(invocation)
+		l.Info("%s: %s", name, elapsed)
+	}
 }
 
 func (l *Logger) Trace(msg string, a ...interface{}) {
